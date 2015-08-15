@@ -1,0 +1,46 @@
+###############################################################################
+           phosphor_plot.py
+
+           is used to draw timeseries data in the style of
+           an old analog oscilloscope.
+
+            (c) 2015 Christian Vogel <vogelchr@vogel.cx>
+            available on https://github.com/vogelchr/phosphor_plot
+###############################################################################
+
+---- Usage, available by running calling plosphor_plot.py -h ----
+ : Usage: phosphor_plot.py [options] INPUTS...
+ :
+ : Options:
+ :   -h, --help            show this help message and exit
+ :   -W N, --width=N       Width of picture to generate. (def: 800)
+ :   -H N, --height=N      Height of picture to generate. (def: 600)
+ :   -s PIXELS, --sigma=PIXELS
+ :                         Make trace unsharp by convolving with a gaussian of
+ :                         PIXELS width.(def: off)
+ :   -g GAMMA, --gamma=GAMMA
+ :                         Apply gamma to image, to intensify dark parts of the
+ :                         traces. (def: 0.3)
+ :   -R N, --resample=N    Minimal resampling (factor times the horizontal
+ :                         resolution) (def:100)
+ :   -v, --verbose         Be verbose. (def: not)
+ :   -d, --debug           Be even more verbose (for debugging) (def: not).
+ :   -o FILENAME, --output=FILENAME
+ :                         Write out plot as image to FILENAME.
+
+Inputs can be .wav files, .txt files (readable by numpy), or the magic
+words '@square' or '@sine' for testing.
+
+Example:
+
+$ ./phosphor_plot.py -d -o plot_output.png @square
+2015-08-15 15:31:26,228 Generating a simple square wave.
+2015-08-15 15:31:26,229 @square: 100 samples in original data source
+2015-08-15 15:31:26,287 Not enough datapoints, resampled to 79000.
+2015-08-15 15:31:30,059 Applying gamma function for gamma=0.300000
+2015-08-15 15:31:30,092 Using color (0.0, 255.0, 255.0) for this trace.
+2015-08-15 15:31:30,150 Writing out plot to file plot_output.png.
+
+Will write out a square wave to plot_output.png. The overshoots are caused
+by the resampling, which limits the bandwidth to a maximum of half the
+sampling frequency of the input data.
