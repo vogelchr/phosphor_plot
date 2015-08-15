@@ -116,6 +116,14 @@ def rescale_array(arr, new_min, new_max) :
     scale, offs = scale_and_offs(curr_min, curr_max, new_min, new_max)
     return arr*scale+offs
 
+def rescale_array_percentile_clip(arr, min_pct, max_pct, new_min, new_max) :
+    '''Rescale array so that the min_pct and max_pct percentile will cover
+    the range new_min, new_max. Over and underflows will be clipped.'''
+
+    pct_vals = np.percentile(arr, [min_pct, max_pct] )
+    scale, offs = scale_and_offs(pct_vals[0], pct_vals[1], new_min, new_max)
+    return np.clip(arr*scale+offs, new_min, new_max)
+
 def add_trace_to_img(img_arr, trace_arr, color) :
     '''Add trace_arr(grayscale) to RGB image img_arr, using specified color.'''
     for i, c in enumerate(color) :
