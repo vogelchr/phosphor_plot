@@ -50,9 +50,13 @@ def get_input(fn) :
         rate, data = scipy.io.wavfile.read(fn)
         # for stereo, only use left channel
 
-        info('%s: has a sample rate of %d Hz (ignored) and %d channel(s).',
-            fn, rate, data.shape[1])
-        return data[:,0]
+        if len(data.shape) == 2 :
+            warning('%s: only using first channel!'%(fn))
+            data = data[:,0]
+
+        info('%s: has a sample rate of %d Hz (ignored) and %d samples.',
+            fn, rate, data.shape[0])
+        return data
 
     if fn.lower().endswith('.txt') :
         return np.loadtxt(fn)
