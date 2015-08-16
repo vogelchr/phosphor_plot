@@ -83,14 +83,13 @@ def add_at_fract_idx_with_weight(arr, fract_idx, increment=1.0) :
     '''Increment data in an array at a "fractional index" by spreading
     the increment around the nearest neighbors weighted by (linear) proximity.'''
 
-    # fractional indices and weights for all dimensions, [ [(i,w),(i,w)], ..]
+    # fractional indices and weights for each dimension, [ [(i,w),(i,w)], ..]
     neigh_idx_arr = [ fract_to_int_neigh_with_weight(fi) for fi in fract_idx ]
     for i_w_arr in itertools.product(*neigh_idx_arr) :
-        # complete index for this particular neighbor
-        idx = tuple([iw[0] for iw in i_w_arr])
-        # weight, calculated as product of all dimensions' weights
-        weight = reduce(operator.mul, [iw[1] for iw in i_w_arr], 1.0)
-        # add to array
+        # i_w_arr is list of [(index,per_coordinate_weight)] for each
+        # dimension, convert to combined index, and list of weights
+        idx, weights = zip(*i_w_arr) # [(a,1),(b,2),(c,3) -> (a,b,c),(1,2,3)
+        weight = reduce(operator.mul, weights, 1.0)
         arr[idx] += weight*increment
 
 def scale_and_offs(amin, amax, bmin, bmax, offs_is_on_a=False) :
